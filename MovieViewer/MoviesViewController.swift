@@ -19,15 +19,22 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // Initialize a UIRefreshControl
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refreshControlAction), for: UIControlEvents.valueChanged)
+        //add refresh control to table view
+        tableView.insertSubview(refreshControl, at: 0)
+        
         tableView.dataSource = self
         tableView.delegate = self
-        // Do any additional setup after loading the view.
-
-        
+     
         let apiKey = "b9cf283d3ea737b35cc38bf4a79cabae"
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        
         MBProgressHUD.showAdded(to: self.view, animated: true)
+        
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
             if let data = data {
@@ -37,10 +44,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     self.movies = dataDictionary["results"] as! [NSDictionary]
                     self.tableView.reloadData()
                     
-                            MBProgressHUD.hide(for: self.view, animated: true)
+                    MBProgressHUD.hide(for: self.view, animated: true)
                 }
             }
         }
+    
         task.resume()
     }
 
@@ -75,6 +83,28 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         print("row \(indexPath.row)")
         return cell
+    }
+    
+    // Makes a network request to get updated data
+    // Updates the tableView with the new data
+    // Hides the RefreshControl
+    
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+    // ... Create the URLRequest ...
+        let apiKey = "b9cf283d3ea737b35cc38bf4a79cabae"
+        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        
+        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+        
+    // Reload the tableView now that there is new data
+            self.tableView.reloadData()
+    // Tell the refreshControl to stop spinning
+            refreshControl.endRefreshing()
+            
+        }
+        task.resume()
     }
 
     /*
