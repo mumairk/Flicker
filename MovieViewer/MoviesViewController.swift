@@ -11,8 +11,12 @@ import AFNetworking
 import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
+    
+    
+    @IBOutlet weak var errorView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    
     
     var movies: [NSDictionary]?
     
@@ -28,28 +32,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         
         tableView.dataSource = self
         tableView.delegate = self
-     
-        let apiKey = "b9cf283d3ea737b35cc38bf4a79cabae"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
-        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
-        
-        MBProgressHUD.showAdded(to: self.view, animated: true)
-        
-        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-            if let data = data {
-                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    print(dataDictionary)
-                    
-                    self.movies = dataDictionary["results"] as! [NSDictionary]
-                    self.tableView.reloadData()
-                    
-                    MBProgressHUD.hide(for: self.view, animated: true)
-                }
-            }
-        }
-    
-        task.resume()
+        dataLoad()
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,6 +41,35 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         // Dispose of any resources that can be recreated.
     }
     
+    func dataLoad () {
+                let apiKey = "b9cf283d3ea737b35cc38bf4a79cabae"
+                let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+                let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        
+               MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+                let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+                let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+                    if let data = data {
+                        if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                            print(dataDictionary)
+        
+                            self.movies = dataDictionary["results"] as! [NSDictionary]
+                            self.tableView.reloadData()
+        
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                        }
+                    }else {
+                        self.errorView.isHidden = false
+                        print("test")
+                        self.tableView.isHidden = true
+                            MBProgressHUD.hide(for: self.view, animated: true)
+                            self.tableView.reloadData()
+                    }
+                }
+        
+                task.resume()
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
@@ -106,6 +119,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         }
         task.resume()
     }
+
+    
+    //OPTIONAL
+    
 
     /*
     // MARK: - Navigation
