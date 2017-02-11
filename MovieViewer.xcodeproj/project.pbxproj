@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		042889261E2F12E700E513CE /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 042889251E2F12E700E513CE /* MovieCell.swift */; };
+		044FFE721E4EC4EE00EAC0A0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044FFE711E4EC4EE00EAC0A0 /* DetailViewController.swift */; };
 		045547291E2DCFE700437AD5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045547281E2DCFE700437AD5 /* AppDelegate.swift */; };
 		0455472E1E2DCFE700437AD5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0455472C1E2DCFE700437AD5 /* Main.storyboard */; };
 		045547301E2DCFE700437AD5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0455472F1E2DCFE700437AD5 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		042889251E2F12E700E513CE /* MovieCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
+		044FFE711E4EC4EE00EAC0A0 /* DetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		045547251E2DCFE700437AD5 /* MovieViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		045547281E2DCFE700437AD5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0455472D1E2DCFE700437AD5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -56,6 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				0455473A1E2DD0C700437AD5 /* MoviesViewController.swift */,
+				044FFE711E4EC4EE00EAC0A0 /* DetailViewController.swift */,
 			);
 			name = "view controllers";
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 			files = (
 				045547291E2DCFE700437AD5 /* AppDelegate.swift in Sources */,
 				0455473D1E2DDD3700437AD5 /* readme.md in Sources */,
+				044FFE721E4EC4EE00EAC0A0 /* DetailViewController.swift in Sources */,
 				042889261E2F12E700E513CE /* MovieCell.swift in Sources */,
 				0455473B1E2DD0C700437AD5 /* MoviesViewController.swift in Sources */,
 			);
