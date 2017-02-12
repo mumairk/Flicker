@@ -19,19 +19,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     
     var movies: [NSDictionary]?
+    var endpoint: String!
     
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
 
+        tableView.dataSource = self
+        tableView.delegate = self
+        
         // Initialize a UIRefreshControl
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refreshControlAction), for: UIControlEvents.valueChanged)
+        
         //add refresh control to table view
         tableView.insertSubview(refreshControl, at: 0)
         
-        tableView.dataSource = self
-        tableView.delegate = self
+
         dataLoad()
 
     }
@@ -42,22 +47,29 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     func dataLoad () {
-                let apiKey = "b9cf283d3ea737b35cc38bf4a79cabae"
-                let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
-                let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        let apiKey = "08626c78c1c24c6f0e9912f59264d957"
+        let urlString = "https://api.themoviedb.org/3/movie/\(endpoint!)?api_key="
         
-               MBProgressHUD.showAdded(to: self.view, animated: true)
+        let url = URL(string: urlString + apiKey)!
         
-                let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-                let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
-                    if let data = data {
-                        if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                            print(dataDictionary)
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         
-                            self.movies = dataDictionary["results"] as! [NSDictionary]
-                            self.tableView.reloadData()
+        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         
-                            MBProgressHUD.hide(for: self.view, animated: true)
+        // show Progress HUD
+        MBProgressHUD.showAdded(to: self.view, animated: true)
+        
+        let task: URLSessionDataTask = session.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if let data = data {
+                if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
+                    print(dataDictionary)
+                    
+                    // Hide Progress HUD
+                    MBProgressHUD.hide(for: self.view, animated: true)
+                    
+                    self.movies = dataDictionary["results"] as? [NSDictionary]
+                    self.tableView.reloadData()
                         }
                     }else {
                         self.errorView.isHidden = false
@@ -105,8 +117,11 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func refreshControlAction(refreshControl: UIRefreshControl) {
     // ... Create the URLRequest ...
-        let apiKey = "b9cf283d3ea737b35cc38bf4a79cabae"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let apiKey = "08626c78c1c24c6f0e9912f59264d957"
+        let urlString = "https://api.themoviedb.org/3/movie/\(endpoint!)?api_key="
+        
+        let url = URL(string: urlString + apiKey)!
+        
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
